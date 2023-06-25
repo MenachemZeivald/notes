@@ -12,7 +12,7 @@ function App() {
 
 	return (
 		<TranslateContext.Provider value={translate}>
-			<Header toggleLang={toggleLang} />
+			<Header toggleLang={toggleLang} lang={lang} />
 			<MainLayout />
 		</TranslateContext.Provider>
 	);

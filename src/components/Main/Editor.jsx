@@ -64,6 +64,7 @@ export default function Editor({ note, submitHandler, showEditorToggle, deleteNo
 				value={tags}
 				onChange={e => setTags(e.target.value)}
 			/>
+			{!title && !text && <span>Please fill the fields</span>}
 			<button type='submit' disabled={!title && !text}>
 				Submit
 			</button>

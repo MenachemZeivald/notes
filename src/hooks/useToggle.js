@@ -2,7 +2,8 @@ import React from 'react';
 
 function useToggle(initValue) {
 	if (typeof initValue !== 'boolean' && typeof initValue !== 'function') {
-		alert('useToggle must be passed a boolean value');
+		// throw new Error('useToggle must be passed a boolean or function');
+		console.error('useToggle must be passed a boolean or function');
 	}
 	const [value, setValue] = React.useState(initValue);
 	const toggleValue = () => setValue(!value);

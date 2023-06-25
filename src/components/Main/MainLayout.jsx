@@ -9,14 +9,14 @@ export default function MainLayout() {
 			id: 1,
 			title: 'First Note',
 			text: 'This is a note',
-			date: '2020-01-01',
+			date: new Date().toLocaleString('en-DE'),
 			tags: ['important', 'personal'],
 		},
 		{
 			id: 2,
 			title: 'Second Note',
 			text: 'This is another note',
-			date: '2020-01-01',
+			date: new Date().toLocaleString('en-DE'),
 			tags: ['important', 'work'],
 		},
 	]);

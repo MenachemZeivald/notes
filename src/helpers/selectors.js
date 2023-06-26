@@ -1,7 +1,7 @@
 import Fuse from 'fuse.js';
 
 export function filterNotesBySearch(notes, searchTerm) {
-	// my first implementation
+	// simple search implementation
 	// return notes.filter(
 	// 	note =>
 	// 		note.title.toLowerCase().includes(searchTerm.toLowerCase()) ||

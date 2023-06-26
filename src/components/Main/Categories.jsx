@@ -1,27 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { filterNotesByTag, filterNotesBySearch, sortMotes } from '../../helpers/selectors';
 import Tag from './Tag';
+import useTags from '../../hooks/useTags';
+import { TranslateContext } from '../../App';
+import { filterNotesByTag, filterNotesBySearch, sortMotes } from '../../helpers/selectors';
 
 export default function Categories({ notes, setNotesToShow }) {
 	const [searchTerm, setSearchTerm] = React.useState('');
-	const [notesTags, setNotesTags] = React.useState(() => initNotesTags(notes));
 	const [sortType, setSortType] = React.useState([{ sortBy: 'date', reverse: false }]);
+	const [notesTags, selectTag, resetTags] = useTags(notes);
 
-	function initNotesTags(notes) {
-		let tagsSet = new Set();
-		// iterate through all notes and add all tags to the set
-		notes.forEach(note =>
-			note.tags.forEach(tag => {
-				tagsSet.add(tag);
-			})
-		);
-		// Create an object where each tag is a key and its corresponding value is set to false,
-		// indicating that the tag is initially not selected
-		const tagsObj = Object.fromEntries([...tagsSet].map(item => [item, false]));
-		return tagsObj;
-	}
+	const translate = React.useContext(TranslateContext);
 
 	const filterNotesBySearchCallback = React.useCallback(filterNotesBySearch, [searchTerm]);
 
@@ -33,13 +23,6 @@ export default function Categories({ notes, setNotesToShow }) {
 		setNotesToShow(sortedNotes);
 	}, [notes, notesTags, searchTerm, sortType, filterNotesBySearchCallback, setNotesToShow]);
 
-	const tagClickHandler = e => {
-		const tagName = e.target.textContent;
-		const newTags = { ...notesTags };
-		newTags[tagName] = !newTags[tagName];
-		setNotesTags({ ...newTags });
-	};
-
 	const sortClickHandler = e => {
 		const selectedSort = e.target.textContent;
 		setSortType({ sortBy: selectedSort, ...sortType });
@@ -47,7 +30,7 @@ export default function Categories({ notes, setNotesToShow }) {
 
 	return (
 		<CategoriesLayoutStyle>
-			<label htmlFor='search'>Search </label>
+			<label htmlFor='search'>{translate('search')}</label>
 			<input
 				type='text'
 				id='search'
@@ -55,29 +38,24 @@ export default function Categories({ notes, setNotesToShow }) {
 				onChange={e => setSearchTerm(e.target.value)}
 			/>
 			<h2>
-				Sort by:
+				{translate('sortBy')}:
 				<span onClick={() => setSortType({ ...sortType, reverse: !sortType.reverse })}>
 					{sortType.reverse ? '+' : '-'}
 				</span>
 			</h2>
-			<div onClick={sortClickHandler}>Date</div>
-			<div onClick={sortClickHandler}>Lexical</div>
-			<h2>Tags</h2>
+			<div onClick={sortClickHandler}>{translate('date')}</div>
+			<div onClick={sortClickHandler}>{translate('lexical')}</div>
+			<h2>{translate('tags')}</h2>
 			{Object.keys(notesTags).map((tag, i) => (
-				<Tag
-					key={i}
-					clickHandler={tagClickHandler}
-					tagName={tag}
-					isSelected={notesTags[tag]}
-				/>
+				<Tag key={i} clickHandler={selectTag} tagName={tag} isSelected={notesTags[tag]} />
 			))}
 			<h3
 				onClick={() => {
-					setNotesTags(initNotesTags(notes));
+					resetTags();
 					setSearchTerm('');
 				}}
 			>
-				reset
+				{translate('reset')}
 			</h3>
 		</CategoriesLayoutStyle>
 	);
@@ -85,4 +63,5 @@ export default function Categories({ notes, setNotesToShow }) {
 
 const CategoriesLayoutStyle = styled.div`
 	width: 20vw;
+	background-color: ${p => p.theme.panel};
 `;

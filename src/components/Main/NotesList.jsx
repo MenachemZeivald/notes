@@ -20,14 +20,13 @@ export default function NotesList({ notes, submitNoteHandler, deleteNote }) {
 					<Note key={note.id} note={note} chooseNote={chooseNoteToEdit} />
 				))}
 			</div>
-			{showEditor || (
-				<NewNoteButton
-					toggle={() => {
-						toggleEditor();
-						setNoteToEdit(null);
-					}}
-				/>
-			)}
+			<NewNoteButton
+				toggle={() => {
+					toggleEditor();
+					setNoteToEdit(null);
+				}}
+				isEditorOpen={showEditor}
+			/>
 			{showEditor && (
 				<Editor
 					note={noteToEdit}

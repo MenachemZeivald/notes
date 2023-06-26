@@ -1,13 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import { TranslateContext } from '../App';
+import Tag from './Tag';
+
 export default function Editor({ note, submitHandler, showEditorToggle, deleteNote }) {
 	const LINE_HEIGHT = 20;
 
 	const [title, setTitle] = React.useState(note?.title || '');
 	const [text, setText] = React.useState(note?.text || '');
-	const [tags, setTags] = React.useState(note?.tags || []);
+	const [newTag, setNewTag] = React.useState('');
+	const [tagsArr, setTagsArr] = React.useState(note?.tags || []);
 	const [id, setId] = React.useState(note?.id || Math.random());
+
+	const translate = React.useContext(TranslateContext);
 
 	const titleInputRef = React.useRef();
 	const textInputRef = React.useRef();
@@ -18,9 +24,7 @@ export default function Editor({ note, submitHandler, showEditorToggle, deleteNo
 
 	React.useEffect(() => {
 		const textErea = textInputRef.current;
-		const keyUpHandler = () => {
-			textErea.style.height = calcHeight(text) + 'px';
-		};
+		const keyUpHandler = () => (textErea.style.height = calcHeight(text) + 'px');
 		textErea.addEventListener('keyup', keyUpHandler);
 		return () => textErea.removeEventListener('keyup', keyUpHandler);
 	}, [text]);
@@ -28,7 +32,8 @@ export default function Editor({ note, submitHandler, showEditorToggle, deleteNo
 	const clearFields = () => {
 		setTitle('');
 		setText('');
-		setTags([]);
+		setTagsArr([]);
+		setNewTag('');
 		setId(Math.random());
 		titleInputRef.current.focus();
 	};
@@ -50,7 +55,7 @@ export default function Editor({ note, submitHandler, showEditorToggle, deleteNo
 						id,
 						title,
 						text,
-						tags,
+						tags: tagsArr,
 						date: new Date().toLocaleString('en-DE'),
 					};
 					submitHandler(newNote);
@@ -66,7 +71,7 @@ export default function Editor({ note, submitHandler, showEditorToggle, deleteNo
 				>
 					Delete
 				</span>
-				<label htmlFor='title'>Title</label>
+				<label htmlFor='title'>{translate('title')}</label>
 				<input
 					type='text'
 					id='title'
@@ -74,7 +79,7 @@ export default function Editor({ note, submitHandler, showEditorToggle, deleteNo
 					onChange={e => setTitle(e.target.value)}
 					ref={titleInputRef}
 				/>
-				<label htmlFor='text'>Text</label>
+				<label htmlFor='text'>{translate('text')}</label>
 				<textarea
 					id='text'
 					ref={textInputRef}
@@ -82,14 +87,37 @@ export default function Editor({ note, submitHandler, showEditorToggle, deleteNo
 					onChange={e => setText(e.target.value)}
 				/>
 
-				<label htmlFor='tags'>Tags</label>
-				<input
-					type='text'
-					id='tags'
-					disabled={true}
-					value={tags}
-					onChange={e => setTags(e.target.value)}
-				/>
+				<label>{translate('tags')}</label>
+				<span>click to remove</span>
+				{tagsArr.map((tag, i) => (
+					<Tag
+						key={i}
+						clickHandler={() => setTagsArr([...tagsArr.filter(t => t !== tag)])}
+						tagName={tag}
+					/>
+				))}
+				<label htmlFor='newTag'>
+					<Tag clickHandler={() => setNewTag(' ')} tagName='+' />
+				</label>
+				{newTag && (
+					<input
+						type='text'
+						id='newTag'
+						value={newTag}
+						onChange={e => setNewTag(e.target.value)}
+						onKeyDown={e => {
+							if (e.key === 'Enter') {
+								e.stopPropagation();
+								if (newTag.trim() === '') return;
+								setTagsArr([...tagsArr, newTag]);
+								setNewTag(' ');
+							}
+							if (e.key === 'Escape') {
+								setNewTag('');
+							}
+						}}
+					/>
+				)}
 				{!title && !text && <span>Please fill the fields</span>}
 				<button type='submit' disabled={!title && !text}>
 					Submit
@@ -105,7 +133,7 @@ const FormStyle = styled.form`
 	display: flex;
 	flex-direction: column;
 	background-color: #d6b823;
-
+	color: ${p => p.theme.editorText};
 	textarea {
 		resize: none;
 		line-height: 20px;

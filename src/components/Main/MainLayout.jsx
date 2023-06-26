@@ -62,6 +62,5 @@ export default function MainLayout() {
 
 const MainLayoutStyle = styled.main`
 	width: 100vw;
-	background-color: beige;
 	display: flex;
 `;

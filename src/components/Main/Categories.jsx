@@ -12,11 +12,15 @@ export default function Categories({ notes, setNotesToShow }) {
 	const [sortType, setSortType] = React.useState([{ sortBy: 'date', reverse: false }]);
 	const [showCategories, toggleCategories] = useToggle(false);
 
-	const [notesTags, selectTag, resetTags] = useTags(notes);
+	const [notesTags, selectTag, resetTags, refreshTags] = useTags(notes);
 
 	const translate = React.useContext(TranslateContext);
 
 	const filterNotesBySearchCallback = React.useCallback(filterNotesBySearch, [searchTerm]);
+
+	React.useEffect(() => {
+		refreshTags(notes);
+	}, [notes]);
 
 	React.useEffect(() => {
 		const tempNotes = [...notes];

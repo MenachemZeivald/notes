@@ -101,27 +101,22 @@ export default function Editor({ note, submitHandler, showEditorToggle, deleteNo
 					/>
 				))}
 				<label htmlFor='newTag'>
-					<Tag clickHandler={() => setNewTag(' ')} tagName='+' />
+					<Tag tagName='+' />
 				</label>
-				{newTag && (
-					<input
-						type='text'
-						id='newTag'
-						value={newTag}
-						onChange={e => setNewTag(e.target.value)}
-						onKeyDown={e => {
-							if (e.key === 'Enter') {
-								e.stopPropagation();
-								if (newTag.trim() === '') return;
-								setTagsArr([...tagsArr, newTag]);
-								setNewTag(' ');
-							}
-							if (e.key === 'Escape') {
-								setNewTag('');
-							}
-						}}
-					/>
-				)}
+				<input
+					type='text'
+					id='newTag'
+					value={newTag}
+					onChange={e => setNewTag(e.target.value)}
+					onKeyDown={e => {
+						if (e.key === 'Enter') {
+							e.stopPropagation();
+							if (newTag.trim() === '') return;
+							setTagsArr([...tagsArr, newTag]);
+							setNewTag('');
+						}
+					}}
+				/>
 				{!title && !text && <span>Please fill the fields</span>}
 				<button type='submit' disabled={!title && !text}>
 					Submit

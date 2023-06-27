@@ -11,20 +11,19 @@ function useTags(notes) {
 	};
 
 	const selectTag = e => {
-		const htmlNodeText = e.target.textContent;
+		const htmlNodeText = e.target.textContent.trim();
 		const tagName = htmlNodeText.split(' ')[0];
 		const newTags = { ...tags };
 		newTags[tagName] = !newTags[tagName];
 		setTags({ ...newTags });
 	};
 
-	const addTag = tag => {
-		if (typeof tag !== 'object') return;
-		const newTags = { ...tags, ...tag };
-		setTags({ ...newTags });
+	const refresTags = notes => {
+		setTags(initNotesTags(notes));
 	};
 
-	return [tags, selectTag, resetTags, addTag];
+	console.log(tags);
+	return [tags, selectTag, resetTags, refresTags];
 }
 
 function initNotesTags(notes) {

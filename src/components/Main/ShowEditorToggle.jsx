@@ -1,19 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
 
-export default function NewNoteButton({ toggle, isEditorOpen }) {
+export default function ShowEditorToggle({ toggle, isEditorOpen }) {
 	return (
-		<NewNoteBtnStyle
+		<ToggleStyle
 			className='material-symbols-outlined'
 			rotateBtn={isEditorOpen}
 			onClick={toggle}
 		>
 			add
-		</NewNoteBtnStyle>
+		</ToggleStyle>
 	);
 }
 
-const NewNoteBtnStyle = styled.button`
+const ToggleStyle = styled.button`
 	position: fixed;
 	bottom: 2.5rem;
 	right: 2.5rem;

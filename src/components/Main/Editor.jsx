@@ -1,7 +1,7 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
-import { TranslateContext } from '../App';
+import { TranslateContext } from '../../App';
 import Tag from './Tag';
 
 export default function Editor({ note, submitHandler, showEditorToggle, deleteNote }) {
@@ -28,6 +28,12 @@ export default function Editor({ note, submitHandler, showEditorToggle, deleteNo
 		textErea.addEventListener('keyup', keyUpHandler);
 		return () => textErea.removeEventListener('keyup', keyUpHandler);
 	}, [text]);
+
+	React.useEffect(() => {
+		const escKeyHandler = key => key.code === 'Escape' && showEditorToggle();
+		window.addEventListener('keyup', escKeyHandler);
+		return () => window.removeEventListener('keyup', escKeyHandler);
+	}, [showEditorToggle]);
 
 	const clearFields = () => {
 		setTitle('');
@@ -60,18 +66,13 @@ export default function Editor({ note, submitHandler, showEditorToggle, deleteNo
 					};
 					submitHandler(newNote);
 					clearFields();
+					showEditorToggle();
 				}}
 			>
-				<span onClick={showEditorToggle}>X</span>
-				<span
-					onClick={() => {
-						clearFields();
-						deleteNote(id);
-					}}
-				>
-					Delete
-				</span>
-				<label htmlFor='title'>{translate('title')}</label>
+				<h1>{translate('editor')}</h1>
+				<label htmlFor='title'>
+					<h2>{translate('title')}</h2>
+				</label>
 				<input
 					type='text'
 					id='title'
@@ -79,15 +80,18 @@ export default function Editor({ note, submitHandler, showEditorToggle, deleteNo
 					onChange={e => setTitle(e.target.value)}
 					ref={titleInputRef}
 				/>
-				<label htmlFor='text'>{translate('text')}</label>
+				<label htmlFor='text'>
+					<h2>{translate('text')}</h2>
+				</label>
 				<textarea
 					id='text'
 					ref={textInputRef}
 					value={text}
 					onChange={e => setText(e.target.value)}
 				/>
-
-				<label>{translate('tags')}</label>
+				<label>
+					<h2>{translate('tags')}</h2>
+				</label>
 				<span>click to remove</span>
 				{tagsArr.map((tag, i) => (
 					<Tag
@@ -122,6 +126,14 @@ export default function Editor({ note, submitHandler, showEditorToggle, deleteNo
 				<button type='submit' disabled={!title && !text}>
 					Submit
 				</button>
+				<button
+					onClick={() => {
+						clearFields();
+						deleteNote(id);
+					}}
+				>
+					Delete
+				</button>
 			</FormStyle>
 		</Popup>
 	);
@@ -129,19 +141,57 @@ export default function Editor({ note, submitHandler, showEditorToggle, deleteNo
 
 const FormStyle = styled.form`
 	position: fixed;
-	inset: 1rem;
+	inset: 10vh 23vw;
 	display: flex;
 	flex-direction: column;
-	background-color: #d6b823;
+	background-color: ${p => p.theme.editor};
+	border: 5px solid ${p => p.theme.note};
+	border-radius: 10px;
+	padding: 8px;
 	color: ${p => p.theme.editorText};
-	textarea {
+	box-shadow: 0 0 10px black;
+
+	& h1 {
+		text-align: center;
+	}
+
+	& > input:first-child {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		border-radius: 50%;
+		height: 20px;
+		width: 20px;
+		border: none;
+		outline: none;
+		-webkit-appearance: none;
+	}
+
+	& > input:first-child::-webkit-color-swatch-wrapper {
+		padding: 0;
+	}
+	& > input:first-child::-webkit-color-swatch {
+		border: none;
+		border-radius: 50%;
+	}
+
+	& textarea {
 		resize: none;
 		line-height: 20px;
 	}
 `;
 
+const animIn = keyframes`
+	to {
+		transform: translateY(0vh);
+	}
+`;
+
 const Popup = styled.div`
-	position: fixed;
+	transform: translateY(100vh);
+	animation: ${animIn} 1s forwards;
 	inset: 0;
-	background-color: black;
+	transition: transform 0.5s;
+	position: fixed;
+	background-color: #0000004f;
 `;

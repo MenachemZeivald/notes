@@ -1,8 +1,9 @@
 import React from 'react';
-import NewNoteButton from './NewNoteButton';
+import ShowEditorToggle from './ShowEditorToggle';
 import useToggle from '../../hooks/useToggle';
 import Editor from './Editor';
 import Note from './Note';
+import styled from 'styled-components';
 
 export default function NotesList({ notes, submitNoteHandler, deleteNote }) {
 	const [showEditor, toggleEditor] = useToggle(false);
@@ -15,12 +16,12 @@ export default function NotesList({ notes, submitNoteHandler, deleteNote }) {
 
 	return (
 		<>
-			<div>
+			<NotesContainerStyle>
 				{notes.map(note => (
 					<Note key={note.id} note={note} chooseNote={chooseNoteToEdit} />
 				))}
-			</div>
-			<NewNoteButton
+			</NotesContainerStyle>
+			<ShowEditorToggle
 				toggle={() => {
 					toggleEditor();
 					setNoteToEdit(null);
@@ -38,3 +39,11 @@ export default function NotesList({ notes, submitNoteHandler, deleteNote }) {
 		</>
 	);
 }
+
+const NotesContainerStyle = styled.div`
+	width: 50vw;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	grid-gap: 20px;
+	grid-template-rows: auto;
+`;

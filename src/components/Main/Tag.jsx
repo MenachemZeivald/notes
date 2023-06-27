@@ -12,10 +12,10 @@ export default function Tag({ tagName, isSelected, clickHandler }) {
 
 const TagStyle = styled.div`
 	width: fit-content;
-	border: 2px solid var(--tag-color);
+	border: 2px solid ${p => p.theme.tag};
 	border-radius: 15px;
 	padding: 5px;
-	background-color: var(${p => p.selcted && '--tag-color'});
+	background-color: var(${p => p.selcted && p.theme.tag});
 	& > span {
 		color: ${p => (p.selcted ? 'black' : 'transparent')};
 	}

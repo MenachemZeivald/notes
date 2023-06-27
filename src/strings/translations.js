@@ -11,6 +11,7 @@ export const hebrewStrings = {
 	reset: 'אפס',
 	text: 'טקסט',
 	title: 'כותרת',
+	editor: 'עורך',
 };
 
 export const englishStrings = {
@@ -26,4 +27,5 @@ export const englishStrings = {
 	reset: 'Reset',
 	text: 'Text',
 	title: 'Title',
+	editor: 'Editor',
 };

@@ -2,17 +2,12 @@ import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
 
-:root {
-    --bg-color: #FFDD63;
-    --panel-color: #f9e8b7;
-    --note-color: #FF65B3;
-    --tag-color: #ffae00;
-}
-
 body {
     margin: 0;
     background: ${p => p.theme.bgColor};
-    color: ${p => p.theme.textColor};}
+    color: ${p => p.theme.textColor};
+    overflow-x: hidden;
+  }
 
 
 *, *::before, *::after {

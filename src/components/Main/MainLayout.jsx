@@ -4,29 +4,15 @@ import Categories from './Categories';
 import NotesList from './NotesList';
 
 export default function MainLayout() {
-	const [notes, setNotes] = React.useState([
-		{
-			id: 1,
-			title: 'First Note',
-			text: 'This is a note',
-			date: new Date().toLocaleString('en-DE'),
-			tags: ['important', 'personal'],
-		},
-		{
-			id: 2,
-			title: 'Second Note',
-			text: 'This is another note',
-			date: new Date().toLocaleString('en-DE'),
-			tags: ['important', 'work'],
-		},
-	]);
+	const [notes, setNotes] = React.useState([]);
 	const [notesToShow, setNotesToShow] = React.useState([...notes]);
-	// React.useEffect(() => {
-	// const savedNotes = JSON.parse(localStorage.getItem('notes'));
-	// if (savedNotes) {
-	// 	setNotes(savedNotes);
-	// }
-	// }, []);
+
+	React.useEffect(() => {
+		const savedNotes = JSON.parse(localStorage.getItem('notes'));
+		if (savedNotes) {
+			setNotes(savedNotes);
+		}
+	}, []);
 
 	React.useEffect(() => setNotesToShow([...notes]), [notes]);
 
@@ -36,6 +22,7 @@ export default function MainLayout() {
 		if (noteIndex !== -1) {
 			const newNotes = [...notes];
 			newNotes[noteIndex] = newNote;
+			localStorage.setItem('notes', JSON.stringify(newNotes));
 			setNotes(newNotes);
 			return;
 		}
@@ -49,18 +36,21 @@ export default function MainLayout() {
 	};
 
 	return (
-		<MainLayoutStyle>
+		<>
 			<Categories notes={notes} setNotesToShow={setNotesToShow} />
-			<NotesList
-				notes={notesToShow}
-				submitNoteHandler={submitNoteHandler}
-				deleteNote={deleteNote}
-			/>
-		</MainLayoutStyle>
+			<MainLayoutStyle>
+				<NotesList
+					notes={notesToShow}
+					submitNoteHandler={submitNoteHandler}
+					deleteNote={deleteNote}
+				/>
+			</MainLayoutStyle>
+		</>
 	);
 }
 
 const MainLayoutStyle = styled.main`
 	width: 100vw;
 	display: flex;
+	justify-content: center;
 `;

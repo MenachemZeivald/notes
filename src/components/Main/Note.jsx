@@ -1,10 +1,11 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown';
 import Tag from './Tag';
 
 export default function Note({ note, chooseNote }) {
-	const [noteColor, setNoteColor] = React.useState(note?.color);
+	const theme = useTheme();
+	const [noteColor, setNoteColor] = React.useState(theme.note);
 	return (
 		<NoteStyle color={noteColor}>
 			<input type='color' value={noteColor} onChange={e => setNoteColor(e.target.value)} />
@@ -20,7 +21,7 @@ export default function Note({ note, chooseNote }) {
 }
 
 const NoteStyle = styled.div`
-	background-color: ${p => p.color || p.theme.note};
+	background-color: ${p => p.theme.note};
 	border-radius: 5px;
 	padding: 10px;
 	padding: 10px;

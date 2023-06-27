@@ -131,6 +131,7 @@ export default function Editor({ note, submitHandler, showEditorToggle, deleteNo
 						clearFields();
 						deleteNote(id);
 					}}
+					disabled={!note?.id || (!title && !text)}
 				>
 					Delete
 				</button>
@@ -147,12 +148,13 @@ const FormStyle = styled.form`
 	background-color: ${p => p.theme.editor};
 	border: 5px solid ${p => p.theme.note};
 	border-radius: 10px;
-	padding: 8px;
+	padding: 1rem;
 	color: ${p => p.theme.editorText};
 	box-shadow: 0 0 10px black;
 
 	& h1 {
 		text-align: center;
+		margin: 0;
 	}
 
 	& > input:first-child {
@@ -178,6 +180,11 @@ const FormStyle = styled.form`
 	& textarea {
 		resize: none;
 		line-height: 20px;
+	}
+
+	@media (max-width: 768px) {
+		inset: 2vw;
+		padding: 2rem;
 	}
 `;
 

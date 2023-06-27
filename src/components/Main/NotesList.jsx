@@ -46,4 +46,9 @@ const NotesContainerStyle = styled.div`
 	grid-template-columns: repeat(3, 1fr);
 	grid-gap: 20px;
 	grid-template-rows: auto;
+	@media (max-width: 768px) {
+		width: 100%;
+		grid-template-columns: repeat(2, 1fr);
+		padding: 5vw;
+	}
 `;

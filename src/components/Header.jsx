@@ -53,10 +53,15 @@ const SwitchersContainer = styled.div`
 	gap: 18px;
 	position: absolute;
 	align-items: center;
-	right: 18px;
+	width: 100vw;
+	justify-content: flex-end;
 	& span:last-child {
 		display: flex;
 		align-items: center;
+	}
+	@media (max-width: 768px) {
+		justify-content: space-between;
+		padding: 0 8px;
 	}
 `;
 
